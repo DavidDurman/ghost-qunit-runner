@@ -1,7 +1,7 @@
 // Configure Casper.
 // -----------------
 
-// Timeout. 50s should be enough.
+// Timeout. 50s should be enough. #FIXME This is hacky and should be done without timeouts.
 var timeout = 50000;//ms
 
 var casper = require('casper').create({
@@ -33,18 +33,20 @@ var url = casper.cli.args[0],
 
 function getTestResult() {
 
-    var failures = [],
-        failElements = document.querySelectorAll('#qunit-tests > .fail'),
-        forEach = Array.prototype.forEach;
+    var failures = [];
+    var failElements = document.querySelectorAll('#qunit-tests > .fail');
+    var forEach = Array.prototype.forEach;
 
     // Get text content of an element pointed to by `selector` in the context of `fail`.
     function t(selector, fail) {
+
         var el = fail.querySelector(selector);
         return el ? el.textContent : 'UNKNOWN';
     }
 
     // For all tests.
     forEach.call(failElements, function(fail) {
+
         var info = {
             module: t('.module-name', fail),
             test:   t('.test-name',   fail),
@@ -54,16 +56,17 @@ function getTestResult() {
         // For all asserts.
         var assertElements = fail.querySelectorAll('ol > .fail');
         forEach.call(assertElements, function(assert) {
-            var simple = (assert.childElementCount == 0),
-                oneTest = {
-                    msg: simple ? assert.textContent : t('.test-message', assert),
-                    expected: simple ? '' : t('.test-expected > td > pre', assert),
-                    actual:   simple ? '' : t('.test-actual > td > pre', assert),
-                    diff: {
-                        del: t('.test-diff del', assert),
-                        ins: t('.test-diff ins', assert)
-                    }
-                };
+
+            var simple = (assert.childElementCount == 0);
+            var oneTest = {
+                msg: simple ? assert.textContent : t('.test-message', assert),
+                expected: simple ? '' : t('.test-expected > td > pre', assert),
+                actual:   simple ? '' : t('.test-actual > td > pre', assert),
+                diff: {
+                    del: t('.test-diff del', assert),
+                    ins: t('.test-diff ins', assert)
+                }
+            };
             info.tests.push(oneTest);
         });
         
@@ -88,7 +91,9 @@ function printResults(self) {
     var result = self.evaluate(getTestResult);
 
     result.failures.forEach(function(fail) {
+
         casper.echo('\n' + fail.module + ' > ' + fail.test, 'WARNING');
+
         fail.tests.forEach(function(test) {
             casper.echo(' |_ ' + test.msg, 'PARAMETER');
             casper.echo('\tExpected: ' + test.expected, 'INFO');

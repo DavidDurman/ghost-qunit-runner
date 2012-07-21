@@ -1,7 +1,7 @@
 CasperJS QUnit test runner.
 ===========================
 
-Run QUnit tests with CasperJS in a PhantomJS headless browser.
+Run QUnit tests in a PhantomJS headless browser with CasperJS.
 
 Dependencies
 ============
@@ -19,4 +19,4 @@ Features
 
 - Run QUnit tests in a headless browser.
 - Display colorful results in the command line.
-- Display remote (in test) logging in the command line.
+- Display remote (in test) logging in the command line, i.e. console.log() in your tests work as expected.
