@@ -1,5 +1,5 @@
-CasperJS QUnit test runner.
-===========================
+PhantomJS QUnit test runner.
+============================
 
 Run QUnit tests in a PhantomJS headless browser with CasperJS.
 
